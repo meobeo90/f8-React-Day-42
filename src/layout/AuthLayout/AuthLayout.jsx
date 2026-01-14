@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router";
 
 function AuthLayout() {
 const token = localStorage.getItem("accessToken");

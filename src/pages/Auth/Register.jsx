@@ -54,9 +54,9 @@ function Register() {
                     {errors.fullName?.message}
                 </p>
                 <PasswordInput
-                register = {register} name="password" placeholder="Enter password..." show={showPassword} autoComplete="new-password" toggle={()=> setShowPassword(v=>!v)} error={errors.password.message} />
+                register = {register} name="password" placeholder="Enter password..." show={showPassword} toggle={()=> setShowPassword(v=>!v)} error={errors.password.message} />
                 <PasswordInput
-                register = {register} name="confirmPassword" placeholder="Enter confirm password..." show={showConfirmPassword} autoComplete="new-password" toggle={()=> setShowConfirmPassword(v=>!v)} error={errors.confirmPassword.message} />
+                register = {register} name="confirmPassword" placeholder="Enter confirm password..." show={showConfirmPassword} toggle={()=> setShowConfirmPassword(v=>!v)} error={errors.confirmPassword.message} />
          
                 <button disabled={isLoading} type="submit" className="cursor-pointer py-3 px-2 rounded-xl bg-pink-600 text-white font-bold">
                     {isLoading ? "Signing up..." : "Signup"}
