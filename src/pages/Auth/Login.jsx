@@ -36,13 +36,17 @@ function Login() {
     return (
         <div className="w-full">
             <h1 className="text-black text-3xl font-bold py-2 mb-4 text-center">Login</h1>
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3 max-w-90">
-                <input type="text" {...register("email")} className="border rounded-sm p-2" placeholder="Enter email..."/>
-                <p className="text-red-500 text-sm">
-                    {errors.email?.message}
-                </p>
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 max-w-90">
+              <div>
+                    <input type="text" {...register("email")} className="border rounded-sm p-2 w-full" placeholder="Enter email..."/>
+                    {errors.email &&
+                        (<p className="text-red-500 text-sm">
+                            {errors.email.message}
+                        </p>)
+                    }
+              </div>
                <PasswordInput
-               register = {register} name="password" placeholder="Enter password..." autoComplete="current-password" show={showPassword} toggle={()=> setShowPassword(v=>!v)} error={errors.password.message}/>
+               register = {register} name="password" placeholder="Enter password..." autoComplete="current-password" show={showPassword} toggle={()=> setShowPassword(v=>!v)} error={errors.password?.message}/>
                 <button disabled={isLoading} type="submit" className="cursor-pointer py-3 px-2 rounded-xl bg-pink-600 text-white font-bold">
                     {isLoading ? "Logging in..." : "Login"}
                 </button>

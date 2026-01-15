@@ -1,14 +1,18 @@
-import { useGetCurrentUserQuery } from "@/services/auth";
+import { authApi, useGetCurrentUserQuery } from "@/services/auth";
+import { useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router";
 
 function Header() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const token = localStorage.getItem("accessToken");
     const {data, isLoading} = useGetCurrentUserQuery(undefined, {skip: !token});
-    // console.log(data);
     const handleLogout = ()=> {
         localStorage.removeItem("accessToken");
-        navigate("/")
+        console.log(authApi);
+        
+        dispatch(authApi.util.resetApiState());
+        navigate("/");
     }
     if (token && isLoading) return (
         <div className="h-16 flex items-center justify-center">
@@ -16,7 +20,7 @@ function Header() {
             </div>
         </div>
     );
-
+    console.log(data);
     
     return (
         <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
@@ -37,11 +41,11 @@ function Header() {
                                 Hi, <span className="text-pink-600">{data.firstName}</span>
                             </span>
                         </div>
-                        <div className="absolute right-0 top-full pt-2 w-32 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                        <div className="absolute right-0 top-full pt-2 w-20 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
                             <div className="bg-white border rounded-xl shadow-lg overflow-hidden">
-                                <button onClick={handleLogout} className="w-full px-4 py-2.5 text-left text-sm font-semibold text-gray-700 rounded-xl hover:bg-pink-50 hover:text-pink-600 cursor-pointer transition-colors">
-                                Logout
-                            </button>
+                                <button onClick={handleLogout} className="w-full px-4 py-2.5 text-center text-sm font-semibold text-gray-700 rounded-xl hover:bg-pink-50 hover:text-pink-600 cursor-pointer transition-colors">
+                                    Logout
+                                </button>
                             </div>
                         </div>
                     </div>

@@ -1,9 +1,10 @@
 import { Eye, EyeOff } from "lucide-react";
-import { p } from "react-router/dist/development/index-react-server-client-gGyf-7Xp";
 
 function PasswordInput({
 register, name, show, toggle, placeholder, autoComplete ="new-password", error
 }) {
+    console.log(error);
+    
     return (
         <div className="flex flex-col gap-1 w-full">
             <div className="relative">

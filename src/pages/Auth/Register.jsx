@@ -32,31 +32,54 @@ function Register() {
                 password_confirmation: values.confirmPassword
             }).unwrap();
             console.log(res);
-            const token = res?.access_token || res?.data.access_token;
+            const token = res?.access_token;
 
-         if (token) localStorage.setItem("accessToken", res.access_token);            
+            if (token) localStorage.setItem("accessToken", token);            
             navigate("/")
-        } catch (errors) {
-            console.log(errors);
-            
-            const message = errors?.data.message.email?.[0] ||
-            "Đăng ký không thành công!";
-            
-            toast.error(message);
+        } catch (error) {
+            console.log(error);
+           let message = "Đã có lỗi hệ thống xảy ra. Vui lòng thử lại sau!";
+           const isNetworkError = error?.data === "Network Error" || error?.error === "TypeError: Failed to fetch";
+           if (isNetworkError) {
+            message = "Không thể kết nối tới máy chủ. Vui lòng kiểm tra kết nối mạng!"
+           }
+           else if (error?.data && typeof error.data === "object") {
+            const errors = error.data;
+            message = "Đăng ký không thành công!";
+            if(errors?.email) {
+                message = `${message} Email đã tồn tại!`
+            }
+             if(errors?.lastName || errors?.firstName) {
+                message = `${message} Tên không hợp lệ!`
+            }
+           }
+           toast.error(message);
         }
     }
     return (
         <div className="w-full">
             <h2 className="text-black text-3xl font-bold py-2 mb-4 text-center">Register</h2>
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3 max-w-90">
-                <input type="text" {...register("fullName")} className="border rounded-sm p-2" placeholder="Enter your full name..."/>
-                <p className="text-red-500 text-sm">
-                    {errors.fullName?.message}
-                </p>
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 max-w-90">
+                <div>
+                    <input type="text" {...register("fullName")} className="border rounded-sm p-2 w-full" placeholder="Enter your full name..."/>
+                    {errors.fullName && (
+                        <p className="text-red-500 text-sm">
+                            {errors.fullName.message}
+                        </p>
+                    )}
+                </div>
+                <div>
+                    <input type="text" {...register("email")} className="border rounded-sm p-2 w-full" autoComplete="email" placeholder="Enter email..."/>
+                    {errors.email && (
+                        <p className="text-red-500 text-sm">
+                            {errors.email.message}
+                        </p>
+                    )}
+                </div>
                 <PasswordInput
-                register = {register} name="password" placeholder="Enter password..." show={showPassword} toggle={()=> setShowPassword(v=>!v)} error={errors.password.message} />
+                register = {register} name="password" placeholder="Enter password..." show={showPassword} toggle={()=> setShowPassword(v=>!v)} error={errors.password?.message} />
                 <PasswordInput
-                register = {register} name="confirmPassword" placeholder="Enter confirm password..." show={showConfirmPassword} toggle={()=> setShowConfirmPassword(v=>!v)} error={errors.confirmPassword.message} />
+                register = {register} name="confirmPassword" placeholder="Enter confirm password..." show={showConfirmPassword} toggle={()=> setShowConfirmPassword(v=>!v)} error={errors.confirmPassword?.message} />
          
                 <button disabled={isLoading} type="submit" className="cursor-pointer py-3 px-2 rounded-xl bg-pink-600 text-white font-bold">
                     {isLoading ? "Signing up..." : "Signup"}
